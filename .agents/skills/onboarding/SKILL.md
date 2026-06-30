@@ -76,7 +76,7 @@ them to a client (McContext) — not McContext itself. Normal sentence case; cap
 ░▀░▀░░▀░░▀▀▀░▀░▀░▀░▀░░░▀░▀░▀▀▀░░░▀░▀░▀░▀░▀▀▀░▀░▀░▀░▀░░▀░░▀░▀░▀▀▀░▀░▀
 ```
 
-Then the tagline on its own line in italics — `*quality, not velocity*` — then the welcome:
+Then the tagline on its own line in italics — `*quality and velocity*` — then the welcome:
 
 > **Welcome to the Atlan AI Hackathon — we're really glad you're here. 👋**
 >

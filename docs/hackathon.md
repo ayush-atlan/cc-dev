@@ -1,10 +1,8 @@
 # The Atlan AI Hackathon
 
-## The one rule: quality, not velocity
+## The one rule: quality and velocity
 
-Anyone can ship an agent that *usually* works. We're judging the opposite - agents that are
-**correct, grounded, and hard to fool**, run again and again. A flashy demo that cracks under
-pressure loses to a quiet agent that's right every time. Build like you're actually hiring this thing.
+Ship fast - but ship something that holds. We want both: agents that are **correct, grounded, and hard to fool**, *and* quick to build, iterate, and run. The bench rewards both sides - accuracy, edge-cases, and security, but also latency, cost, and how early you get something working. Build like you're actually hiring this thing.
 
 ## You're an agency. McContext is your client.
 
