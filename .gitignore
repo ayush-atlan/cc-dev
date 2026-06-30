@@ -1,0 +1,109 @@
+# ─── OS Files ───────────────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# ─── IDE & Editor Settings ──────────────────────────────────────────────────
+.vscode/
+# Allow sharing recommended extensions
+!.vscode/extensions.json
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+
+# ─── Environment & Secrets ──────────────────────────────────────────────────
+.env
+.env.*
+# Allow committed example/template env files
+!.env.example
+*.env
+secrets/
+secret.yml
+secret.yaml
+
+# ─── Credentials & Certificates ─────────────────────────────────────────────
+*.pem
+*.key
+*.cert
+*.crt
+*.p12
+*.pfx
+*.jks
+credentials.json
+credentials.yaml
+credentials.yml
+service-account*.json
+*-sa-key.json
+
+# ─── Terraform ──────────────────────────────────────────────────────────────
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+*.tfvars
+# Allow committed example tfvars
+!*.tfvars.example
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+crash.log
+crash.*.log
+
+# ─── Ansible ────────────────────────────────────────────────────────────────
+*.retry
+vault-password*
+.vault_pass*
+
+# ─── Python ─────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+.Python
+*.egg-info/
+dist/
+build/
+
+# ─── Node.js ────────────────────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-error.log*
+.npm/
+.yarn/
+
+# ─── Logs & Temp Files ──────────────────────────────────────────────────────
+*.log
+logs/
+*.tmp
+*.temp
+*.bak
+*.cache
+*.pid
+
+# ─── Package / Archive Files ────────────────────────────────────────────────
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+*.7z
+
+# Claude Code local session state (do not commit)
+.claude/decisions/
+.claude/reflections/
+.claude/*.jsonl
+
+# ─── Agent / CLI tokens ─────────────────────────────────────────────────────
+*.token
+.mcp-token

@@ -1,0 +1,6 @@
+# Local-dev harness. Auth is your Claude subscription via the Claude Code CLI — see README.
+# Prereq (not pip): the Claude Code CLI — `npm install -g @anthropic-ai/claude-code`
+claude-agent-sdk>=0.1
+pyyaml>=6
+psycopg[binary]>=3.2
+streamlit>=1.40
