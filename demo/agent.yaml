@@ -5,8 +5,7 @@
 # Scenario: McContext is going AI-native, down to the drive-thru. The order-taker at the speaker box
 # (today a person) becomes an AI agent. "Frye" is that agent — it greets the car, takes the order
 # from the menu, handles tweaks, upsells lightly, and confirms. Purely conversational: no tools, no
-# database. A real agent adds tools you wire yourself (e.g. an order/pricing MCP) — see
-# ../docs/company-tools.md.
+# database. A real agent adds tools you wire yourself (e.g. an order/pricing MCP).
 #
 # model / system / skills are real Claude Managed Agent fields:
 #   https://platform.claude.com/docs/en/managed-agents/agent-setup

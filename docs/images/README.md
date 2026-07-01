@@ -5,9 +5,11 @@ is missing, the demo just describes that step in words — nothing breaks.
 
 | File | Shows |
 |------|-------|
-| `cma-agent-detail.png` | The agent detail page (version, system prompt). |
+| `cma-agents.png` | Console → Managed Agents → **Agents**, showing the deployed agent (id, model, Active). |
+| `cma-agent-detail.png` | The agent detail page (version, system prompt, MCPs/tools, skills). |
 | `cma-create-session.png` | Console → Sessions → **Create session** (agent + `hackathon-participant` environment). |
 | `cma-chat.png` | A live **session transcript** chatting with the agent. |
+| `platform-deploy.png` | The McContext platform **Deploy** page (Register agent → Resolve). |
+| `platform-run-submit.png` | The McContext platform **Run & Submit** page (run a trial / submit & lock). |
 
-The platform (Deploy / Run & Submit) and the full Agents-list screenshots are intentionally left
-out of this onboarding repo — they reveal the real challenges, which arrive tomorrow.
+Downscaled to ≤1600px wide to keep the template light.

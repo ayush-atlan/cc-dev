@@ -39,8 +39,7 @@ mctools:
 - **(A) Function tool** — a string entry `my_lookup` maps to `mctools/my_lookup/tool.py`, which
   defines `NAME`, `DESCRIPTION`, `INPUT_SCHEMA`, and a `run(args)` function.
 - **(B) Remote MCP server** — a `{name, url}` mapping; your agent connects to it directly. The
-  company tools are an MCP you're given a URL + token for — plugging it in is part of the job
-  (see `../docs/company-tools.md`). Keep the token in `localdev/.env` (copy `.env.example`).
+  company tools are an MCP you're given a URL + token for — plugging it in is part of the job. Keep the token in `localdev/.env` (copy `.env.example`).
 
 Declare nothing under `mctools` and you get a **pure conversational agent** — that's the `demo/`.
 

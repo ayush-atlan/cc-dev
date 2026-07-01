@@ -18,7 +18,7 @@ pieces fit. (Guided version: run `/demo`.) It's **purely conversational** — no
 folder shows the exact structure you'll build for real.
 
 **Tools aren't part of this demo.** A real agent wires its own — the company's data is an MCP you
-plug in yourself (see [`../docs/company-tools.md`](../docs/company-tools.md)).
+plug in yourself.
 
 ## Run it locally
 

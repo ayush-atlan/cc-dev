@@ -19,7 +19,7 @@ live in `.agents/skills/` (`onboarding`, `demo`, `local-dev`); `.claude/skills` 
 - Build the agent definition yourself — no scaffold or converter (it's part of the job). Official
   Claude Managed Agents docs are linked in `docs/building-agents.md`.
 - Two credentials: **local dev → your Claude subscription** (no API key); **deploy → your Anthropic
-  workspace key**. Company tools are an **MCP** (URL + token) you wire yourself (`docs/company-tools.md`).
+  workspace key**. Company tools are an **MCP** (URL + token) you wire yourself.
 - **Never commit secrets** — tokens go in a gitignored `.env`. Don't hardcode held-out data.
 
 Help: `#atlan-ai-hackathon-2026` on Slack.

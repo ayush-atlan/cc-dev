@@ -61,7 +61,7 @@ Crumb: `Local dev · Overview`
 > chat again, in seconds — is where the quality comes from. When it's good, you build it as a managed
 > agent in your workspace and register it. One thing you shape; two places it runs.
 
-Menu: **Set it up → (recommended)** · **What about tools and the company data?** *(an agent gets only the tools it declares; the company tools are an MCP you wire yourself — see `docs/company-tools.md`; the demo is pure conversation)* · **Ask a question**
+Menu: **Set it up → (recommended)** · **What about tools and the company data?** *(an agent gets only the tools it declares; the company tools are an MCP you wire yourself; the demo is pure conversation)* · **Ask a question**
 
 ### Screen 2 — Set up
 
@@ -74,7 +74,7 @@ Crumb: `Local dev · Setup`
 > 3. **Python deps** — `pip install -r localdev/requirements.txt`.
 >
 > *(Wiring the company MCP? Keep its URL + token in `localdev/.env` — copy `.env.example` — and
-> reference it from your `agent.yaml`. See `docs/company-tools.md`.)*
+> reference it from your `agent.yaml`.)*
 
 Menu: **Install the Python deps for me** *(run `pip install -r localdev/requirements.txt`, report the result)* · **I've signed in & set up → (recommended)** · **Help me authenticate** *(walk the CLI install + `claude setup-token` / `claude login`)* · **Ask a question**
 

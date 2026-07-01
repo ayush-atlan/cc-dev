@@ -27,9 +27,9 @@ your harness's interactive multiple-choice tool — in Claude Code that's the **
 list. Keep menus to ≤4 short options and tag the suggested one **(recommended)**.
 
 **Screenshots (optional):** if a file exists under `docs/images/` for a step, **display it inline**
-to orient the participant — `cma-agent-detail.png`, `cma-create-session.png`, `cma-chat.png`. (The
-platform and Agents-list shots are intentionally left out of this practice repo — describe those
-steps in words.) Show the relevant one at its step; otherwise just describe the step.
+to orient the participant — `cma-agents.png`, `cma-agent-detail.png`, `cma-create-session.png`,
+`cma-chat.png`, `platform-deploy.png`, `platform-run-submit.png`. Show the relevant one at its step;
+if it isn't there, just describe the step in words.
 
 ## Walk it like this
 
@@ -52,8 +52,7 @@ Anthropic's [agent setup docs](https://platform.claude.com/docs/en/managed-agent
 
 **On tools:** this demo has none — it's pure conversation. A real agent does its work with **tools
 you wire yourself**: the company's data is an **MCP** you're handed (a URL + token) and plug in, and
-you can add your own tools. We hand you no tool logic — wiring it is part of the job
-(`docs/company-tools.md`). Just plant that here; don't dwell.
+you can add your own tools. We hand you no tool logic — wiring it is part of the job. Just plant that here; don't dwell.
 
 **3. Open the skills and quote them.** Read both, **print them inline**, and explain a skill is YAML
 frontmatter (`name` + `description`) plus markdown the agent follows:
@@ -134,7 +133,7 @@ The response has an **`id`** (like `agent_01H…`) and a **`version`** (starts a
 MCP are extra fields — `docs/building-agents.md`.)* **If it errors** (no key / no access), don't fake
 success — show the error and point them to the organizers, then continue.
 
-**4. See it in your workspace — and run it live.** Send them to the Console (show
+**4. See it in your workspace — and run it live.** Send them to the Console (show `cma-agents.png`,
 `cma-agent-detail.png`, `cma-create-session.png`, `cma-chat.png` if present):
 > Open your workspace → **Managed Agents → Agents.** Your agent (**Frye (demo)**) is right there —
 > its **ID**, model, and an **Active** badge. Click the ID to **copy** it — that's exactly what you'll

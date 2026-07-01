@@ -30,7 +30,7 @@ for pushing to your CMA workspace. Two credentials, two jobs.
 
 **How do I get the company data and tools?**
 You're given the company **MCP** - a URL and an OAuth token. Wiring it into your agent is part of
-the challenge ([`company-tools.md`](./company-tools.md)). Keep the token out of git.
+the challenge. Keep the token out of git.
 
 **How many tries do I get?**
 **3 lives per challenge.** Each Run spends one; Submit is your final answer (its score stays with

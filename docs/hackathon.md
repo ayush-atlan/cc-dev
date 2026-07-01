@@ -30,9 +30,8 @@ See the client for yourself at **<https://mccontext.com>**.
 ## How you're judged, in one line
 
 The bench score is **one input, not the whole grade.** Organizers from McContext weigh what you
-built, how it holds up on the bench, and how you pitch it. The **top 10 teams present live to
-McContext's founders, Varun and Prukalpa**, with their deck, product, and walkthrough. See
-[`evaluation.md`](./evaluation.md).
+built, how it holds up on the bench, and how you pitch it. The **top 7 teams present live to
+McContext's founders, Varun and Prukalpa**, with their deck, product, and walkthrough.
 
 ## The build, end to end
 
@@ -41,6 +40,6 @@ McContext's founders, Varun and Prukalpa**, with their deck, product, and walkth
   and a version number.
 - **The platform** - register an agent id + version per challenge, spend **3 lives** running the
   bench, then submit.
-- **The finale** - the top 10 pitch to the founders.
+- **The finale** - the top 7 pitch to the founders.
 
 New here? Run `/onboarding`. First time building an agent? Run `/demo`.

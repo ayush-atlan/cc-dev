@@ -10,8 +10,7 @@ A versioned configuration Anthropic hosts and runs for you (no servers to manage
 
 - **model** — which Claude powers it,
 - **system** — its instructions / persona,
-- **tools** — pre-built tools, your **MCP servers** (the company data is an MCP — see
-  [`company-tools.md`](./company-tools.md)), and custom tools,
+- **tools** — pre-built tools, your **MCP servers** (the company data is an MCP), and custom tools,
 - **skills** — domain procedures with progressive disclosure.
 
 Two more concepts: an **environment** (where sessions run — Anthropic's cloud sandbox; the hackathon
@@ -87,6 +86,8 @@ Your agent also appears in the Console under **Managed Agents → Agents** (id, 
 watch it work, open **Sessions → Create session**, pick your agent and the **hackathon-participant**
 environment, and chat with it live — transcripts and traces land there too. That's where you debug
 between lives. Sessions: <https://platform.claude.com/docs/en/managed-agents/sessions>
+
+![Your agent in the Console — Managed Agents → Agents](images/cma-agents.png)
 
 ![The agent's config — model, system prompt, version](images/cma-agent-detail.png)
 

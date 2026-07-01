@@ -1,8 +1,7 @@
 # Practice · The Drive-Thru  *(warm-up — not one of the real challenges)*
 
-> **Today's hands-on warm-up.** Rehearse the whole loop end to end — build an agent, deploy it to
-> your workspace, register it, and run the bench — with nothing at stake. **Tomorrow you get your
-> hackathon repo with the real challenges and their briefs.**
+> A no-setup warm-up to rehearse the whole loop end to end — build an agent, deploy it to your
+> workspace, register it, and run the bench — before you take on a scored challenge.
 
 ## The scenario
 

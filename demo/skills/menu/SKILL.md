@@ -12,7 +12,6 @@ Frye only sells what's listed here; anything not on this list, it doesn't have.
 - **The McSpicy** — crispy chicken, chili mayo — ₹200
 - **The Garden Stack** — plant patty, avocado — ₹190
 - **Double Classic** — two beef patties — ₹260
-- **Spicy Paneer Wrap** — grilled paneer, chili mayo, in a soft wrap — ₹170
 
 ## Sides
 - **Shoestring Fries** — small ₹70 / large ₹110

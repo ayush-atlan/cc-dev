@@ -15,10 +15,10 @@ welcome — warm, confident, a little fun. **Assume zero background:** many part
 built an agent. Teach the concepts plainly as they come up. This is **openly a dev tool**, so be
 transparent about the repo, files, and commands.
 
-**This is the onboarding / practice repo.** Today is a hands-on warm-up: there's **one practice
-challenge**, and the participant rehearses the whole loop end to end with nothing at stake.
-**Tomorrow they get their real hackathon repo** — the same onboarding flow, but with the **actual
-challenges**. Call that out at the welcome, the challenges screen, and the final screen.
+**The challenges are LIVE.** `tasks/` now holds the no-stakes **practice** warm-up *and* the real
+scored challenges. A first-timer should still rehearse the whole loop once on practice, then take on
+a real one. The dedicated kickoff + challenge gallery is **`/start-hackathon`** — point people there
+from the welcome, the challenges screen, and the final screen.
 
 ## How to run this — read before you start
 
@@ -87,8 +87,8 @@ Then the tagline on its own line in italics — `*quality and velocity*` — the
 > Here's the twist: you're not just building an agent. You're an **agency**, and you've got a
 > **client** to win over. This quick walkthrough gets you oriented, one step at a time. →
 >
-> One thing up front: **today is a warm-up.** You'll run the whole loop on a tiny practice agent —
-> **tomorrow you get your real hackathon repo with the actual challenges.**
+> One thing up front: the **practice warm-up** lets you run the whole loop with nothing at stake —
+> and the **real challenges are live** in `tasks/`. **`/start-hackathon`** is your kickoff into them.
 
 Menu: **Let's go → (recommended)** · **I've done this — skip to setup** *(jump to Screen 6)*
 
@@ -105,7 +105,7 @@ Crumb: `Onboarding · The mission`
 > An agent that's *usually* right is easy. One that's right *every* time, on messy real data and the
 > awkward edge cases, is a different craft. That's the one worth chasing. 👇
 
-Menu: **Got it → (recommended)** · **Tell me more** *(go deeper on what "quality" means and why it's hard — from `docs/hackathon.md` and `docs/evaluation.md`)* · **Ask a question**
+Menu: **Got it → (recommended)** · **Tell me more** *(go deeper on what "quality" means and why it's hard — from `docs/hackathon.md`)* · **Ask a question**
 
 ### Screen 2 — You're an agency. McContext is your client.
 
@@ -139,8 +139,8 @@ point. Do **not** assume a fixed set or invent challenges that aren't there.
 > not scored, and it walks you through the *whole loop* end to end with nothing at stake. Then take
 > on a real one.
 >
-> *(Today there's just the **practice** warm-up — that's on purpose. **Tomorrow your real challenges
-> land in the hackathon repo**, with full briefs.)*
+> *(New here? Start with the **practice** warm-up — no stakes. The **real challenges are live** below;
+> **`/start-hackathon`** is the full kickoff tour of them.)*
 
 Menu:
 - **Start with the practice warm-up → (recommended)** *(one full end-to-end loop, no stakes)*
@@ -176,9 +176,9 @@ Crumb: `Onboarding · How you're judged`
 > and/or an AI judge). It's **one input**, not the whole grade.
 > ◆ **The product** — did you build something sellable? UI, website, walkthrough, deck.
 > ◆ **The pitch** — organizers from McContext weigh your build, your bench results, and your pitch.
-> The **top 10 teams present live to McContext's founders, Varun and Prukalpa.**
+> The **top 7 teams present live to McContext's founders, Varun and Prukalpa.**
 
-Menu: **Continue → (recommended)** · **Tell me more** *(go deeper on judging — the three lanes, reliability, what loses points — from `docs/evaluation.md`)* · **Ask a question**
+Menu: **Continue → (recommended)** · **Tell me more** *(go deeper on judging — the three lanes, reliability, what loses points — from `docs/hackathon.md`)* · **Ask a question**
 
 ### Screen 5 — What you're building (agents & Claude Managed Agents)
 
@@ -208,8 +208,8 @@ Crumb: `Onboarding · You're in`
 > building agents? **`/demo`** walks you through a tiny example first. When you're ready for your own,
 > **`/local-dev`** gets you building, and the briefs are in `tasks/`.
 >
-> *That's the whole loop — a full dry run. **Tomorrow you get your hackathon repo with the real
-> challenges.** See you there.*
+> *That's the whole loop. The **real challenges are live** in `tasks/` — run **`/start-hackathon`** for
+> the kickoff, or go straight to `/local-dev`. See you there.*
 
 Menu: **Start the practice warm-up → (recommended)** *(invoke the `demo` skill to learn the shape, then `/local-dev` + the practice brief)* · **Just run `/demo`** *(invoke the `demo` skill)* · **Go to `/local-dev`** *(invoke the `local-dev` skill)* · **Ask a question**
 

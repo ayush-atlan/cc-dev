@@ -28,8 +28,7 @@ symlink to it.
 - **Deploy** — build the real Claude Managed Agent in your workspace (`docs/building-agents.md`).
 - **Bench** — register the agent id + version on the platform; 3 lives; submit (`docs/the-bench.md`).
 
-Reference docs: `docs/building-agents.md`, `docs/company-tools.md`, `docs/the-bench.md`,
-`docs/evaluation.md`, `docs/hackathon.md`, `docs/faq.md`.
+Reference docs: `docs/building-agents.md`, `docs/the-bench.md`, `docs/hackathon.md`, `docs/faq.md`.
 
 ## Ground rules
 
