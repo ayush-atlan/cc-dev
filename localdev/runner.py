@@ -116,6 +116,8 @@ def _remote_mcp_servers(entries: list[dict]):
             continue
         if entry.get("url"):
             servers[name] = {"type": entry.get("transport", "http"), "url": ex(str(entry["url"]))}
+            if entry.get("headers"):  # e.g. Authorization: Bearer ${TOKEN}
+                servers[name]["headers"] = {k: ex(str(v)) for k, v in entry["headers"].items()}
         elif entry.get("command"):
             servers[name] = {"type": "stdio", "command": ex(str(entry["command"])),
                              "args": [ex(str(a)) for a in (entry.get("args") or [])],

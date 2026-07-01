@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scott · McContext Inventory & Supply</title>
+<style>
+  :root{
+    --ink:#1a1712; --paper:#faf7f2; --card:#fff; --line:#e7e0d5;
+    --burg:#b3321f; --burg-d:#8f2717; --gold:#e0a83a; --muted:#726a5e; --good:#2f7d4f;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased}
+  .wrap{max-width:960px;margin:0 auto;padding:0 24px}
+  h1,h2,h3{line-height:1.15;letter-spacing:-.02em}
+  h1{font-size:clamp(2.4rem,6vw,4rem);margin:.2em 0}
+  h2{font-size:clamp(1.5rem,3.5vw,2.1rem);margin:2.4em 0 .6em}
+  a{color:var(--burg)}
+  .eyebrow{text-transform:uppercase;letter-spacing:.18em;font-size:.72rem;font-weight:700;color:var(--burg)}
+  header{background:linear-gradient(160deg,#fff,#f2ece1);border-bottom:1px solid var(--line)}
+  header .wrap{padding:64px 24px 72px}
+  .sub{font-size:1.2rem;color:var(--muted);max-width:44ch}
+  .cta{display:inline-block;margin-top:26px;background:var(--burg);color:#fff;text-decoration:none;
+       font-weight:600;padding:13px 22px;border-radius:9px}
+  .cta.ghost{background:transparent;color:var(--burg);border:1.5px solid var(--burg);margin-left:10px}
+  .duties{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px}
+  .card h3{margin:.1em 0 .4em;font-size:1.05rem}
+  .card p{margin:0;color:var(--muted);font-size:.94rem}
+  .proof{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;margin-top:10px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px;text-align:center}
+  .stat .n{font-size:2.2rem;font-weight:800;color:var(--burg-d);letter-spacing:-.03em}
+  .stat .l{font-size:.82rem;color:var(--muted);margin-top:4px}
+  .note{font-size:.82rem;color:var(--muted);font-style:italic}
+  .quiet{background:#f0ede6;border-left:4px solid var(--gold);padding:14px 18px;border-radius:0 8px 8px 0;margin:14px 0}
+  ul.bank{list-style:none;padding:0;columns:2;gap:24px}
+  ul.bank li{margin:0 0 8px;color:var(--muted);break-inside:avoid;font-size:.92rem}
+  ul.bank li::before{content:"▸ ";color:var(--gold)}
+  footer{margin-top:60px;border-top:1px solid var(--line);background:#f2ece1}
+  footer .wrap{padding:34px 24px;color:var(--muted);font-size:.88rem}
+  @media(max-width:560px){ul.bank{columns:1}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">McContext · Inventory &amp; Supply</div>
+    <h1>Never short.<br>Never wasteful.</h1>
+    <p class="sub">Scott runs the stockroom across every kitchen — counting what's there, forecasting
+      what's next, ordering in real cases, and marking down what's about to turn. It does the math in
+      the database, not in its head, and shows you every query.</p>
+    <a class="cta" href="#proof">See the proof →</a>
+    <a class="cta ghost" href="#how">Read the trace</a>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <h2>The trade-off every manager runs from memory</h2>
+  <p>Run out of buns at lunch and you lose the sale. Over-order and it rots in the walk-in. Every
+     store manager runs this twice a day, across 2,000 kitchens — from memory, under a lunch rush.
+     <strong>Scott runs it from the numbers.</strong> Every count, receipt, recipe, and waste log —
+     reconciled, not remembered.</p>
+
+  <h2>What Scott does — the whole job, four ways</h2>
+  <div class="duties">
+    <div class="card"><h3>Variance &amp; root cause</h3><p>Reconciles what stock <em>should</em> remain
+      against what was counted — opening + received − sold-by-recipe − waste — and names the gap:
+      over-portioning, spoilage, theft, a miscount, a short delivery. From the evidence, not a hunch.</p></div>
+    <div class="card"><h3>Demand forecast</h3><p>Six months of sales, weekday by weekday, per store,
+      per SKU. Fridays aren't Tuesdays, and a 400-head catering order isn't noise — it pre-positions.
+      Graded against what actually sold.</p></div>
+    <div class="card"><h3>Smart reorder</h3><p>Turns the forecast into an order you can place — whole
+      cases, never a convenient half-pack, never more perishable stock than sells before it expires.
+      Lettuce doesn't keep a week, and Scott knows it.</p></div>
+    <div class="card"><h3>Waste markdown</h3><p>Spots the lot that won't clear before its date and
+      prices it to move — <em>today, not at the deadline</em>. Shows the trade-off out loud, then
+      picks the discount that recovers the most.</p></div>
+  </div>
+
+  <h2 id="proof">Proof, not promises</h2>
+  <p>We ran Scott's method against McContext's real read-only ledger — the actual six months
+     (Dec 2025 – Jun 2026), 10 stores, not a synthetic demo.</p>
+  <div class="proof">
+    <div class="stat"><div class="n">5.6%</div><div class="l">median forecast error (WAPE)<br>across 110 store/SKU pairs</div></div>
+    <div class="stat"><div class="n">$325</div><div class="l">spoilage on the ledger Scott's<br>markdown targets — 6 mo, 10 stores</div></div>
+    <div class="stat"><div class="n">270</div><div class="l">units binned to spoilage<br>= food Scott moves instead</div></div>
+    <div class="stat"><div class="n">100%</div><div class="l">of calls shown with the<br>query behind them</div></div>
+  </div>
+  <p class="note">Pilot figures are measured on the current 10-store dataset. The chain-wide number —
+     ~$130K/yr of recoverable spoilage across ~2,000 stores — is a projection, labelled as such,
+     not a measured result.</p>
+
+  <h3 style="margin-top:1.6em">A real catch, itemized</h3>
+  <p>Asked to reconcile cheese at store <code>str_001</code> for the week of Jun 17–23, Scott ran one
+     query: opening 60 + received 25 − recipe-implied usage 51.47 − waste 0.28 = <strong>expected
+     33.25 vs counted 25.25 → an 8-unit gap</strong>. Waste didn't explain it. Scott read the shift
+     log, found a Jun 21 note — a new griddle hand over-portioning cheese on Big Schema builds, "not
+     weighed off" — and filed it as <code>over_portion</code>. That's <strong>$43.20</strong> of
+     shrink surfaced with a root cause, not a shrug. <span class="note">(Live result on the read-only
+     ledger, cheese at $5.40/kg.)</span></p>
+
+  <div class="quiet"><strong>A quiet week is a good week.</strong> Most inventory tools cry wolf to
+     look useful. Asked about near-expiry cheese at the same store, Scott checked, found the only lot
+     10 days out, and said "no markdown needed." It reports "counts reconcile within tolerance,
+     forecast within tolerance" and leaves it there.</div>
+
+  <h2 id="how">Why Scott is different</h2>
+  <p><strong>It shows its work.</strong> Push back on any call and Scott justifies it from its actual
+     trace — the query it ran, the constraint it applied, the number it landed on. Itemized down to the
+     row it came from.</p>
+  <p><strong>It stays in its lane.</strong> Ask about a customer refund or the company's books and it
+     declines — that's not inventory. It won't guess, won't fabricate a number, and would rather say
+     "I can't tell from this" than be confidently wrong.</p>
+  <p><strong>It doesn't work in a silo.</strong> When a store's about to run short and a neighbor's
+     overstocked, Scott recommends the transfer instead of an emergency order — and flags the front
+     line before the complaints do. <span class="note">(Rebalancing &amp; hand-off shown for the pitch;
+     the graded agent submits the four duties.)</span></p>
+
+  <h2>How it works (for the technical buyer)</h2>
+  <p>Scott is a <strong>Claude Managed Agent</strong> — a model, a system prompt, a set of skills, and
+     the tools it's wired to. It reads your inventory the way an analyst would: investigates before it
+     answers, computes in SQL so the numbers are grounded by construction, and records every decision
+     through an auditable action. Nothing is stored, guessed, or memorized. Inventory reconciliation
+     you can read end-to-end.</p>
+
+  <h2>Hire the clerk who reads every number and forgets none of them</h2>
+  <p class="sub">Scott doesn't sleep, doesn't skim, and doesn't round to a convenient answer.</p>
+  <a class="cta" href="#proof">Put Scott in your stockroom →</a>
+
+  <h2>In Scott's words</h2>
+  <ul class="bank">
+    <li>Never short, never wasteful.</li>
+    <li>Does the math in the database, not in its head.</li>
+    <li>A quiet week is a good week.</li>
+    <li>Itemized down to the row it came from.</li>
+    <li>Whole cases only. Lettuce doesn't keep a week.</li>
+    <li>Rather say "I can't tell from this" than be confidently wrong.</li>
+    <li>Proof, not promises — measured on your real ledger.</li>
+  </ul>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Scott · McContext Inventory &amp; Supply — pitch surface. Bench-scored duties run through the
+    company MCP; this page reads the same ledger. Numbers above are measured on the 10-store pilot
+    unless labelled a projection.
+  </div>
+</footer>
+
+</body>
+</html>
