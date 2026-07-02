@@ -197,13 +197,28 @@ Chain-wide figures are labelled projections.
 
 ---
 
-## 8. The product surface
+## 8. The product surface (landing + live chat)
 
-`product/index.html` — a self-contained static landing page in Scott's voice ("Never short. Never
-wasteful."). Sections: the four duties, **measured** proof stats, the itemized real catch, the
-quiet-week principle, "why different," and a technical-buyer explainer. Rebalancing is presented as
-**display-only** and honestly framed — the pilot data (no SKU counted at ≥2 stores) can't back a real
-cross-store snapshot, so we didn't fake one.
+`product/index.html` — self-contained landing page in Scott's voice ("Never short. Never wasteful.").
+Sections: the four duties, **measured** proof stats, the itemized real catch, the quiet-week
+principle, "why different," and a technical-buyer explainer. Rebalancing is **display-only** and
+honestly framed — the pilot data (no SKU counted at ≥2 stores) can't back a real cross-store
+snapshot, so we didn't fake one. **Theme:** re-skinned to a dark "liquid-glass" look (hero video +
+Instrument Serif + glassmorphism cards); the hero video/font are external CDNs with graceful
+fallbacks (gradient + `serif`).
+
+`chat/` — a **browser chat that replaces Streamlit**, no npm/React/build:
+- `chat/server.py` — stdlib `http.server` (zero deps). Serves the landing at `/`, the chat UI at
+  `/chat`, and `POST /api/chat` which wraps the existing `localdev` `Conversation` (same agent, same
+  Claude subscription as `chat_cli.py`). One server, one command: `.venv/bin/python chat/server.py`.
+- `chat/index.html` — dark chat page modeled on a shadcn prompt-box (we replicated the *look* in
+  plain HTML/CSS; a React component can't drop into a Python repo). Natural, ops-manager quick
+  prompts ("Where did our cheese go?") that resolve store *names* → IDs via the `context` skill.
+- The landing's "Chat with Scott" CTAs route to `/chat`; the chat page links back to `/`.
+
+**Why the lazy HTML path, not React/shadcn:** there is no frontend toolchain in this repo. Standing
+up Vite/Tailwind/shadcn + an API bridge for a chat box is the over-engineering trap; the stdlib
+server + one HTML file does the whole job.
 
 ---
 
@@ -211,10 +226,9 @@ cross-store snapshot, so we didn't fake one.
 
 ```
 stock/
-  agent.yaml              # bench agent: model + prompt + skills + MCP
+  agent.yaml              # bench agent: model + prompt + skills + MCP (world_db removed)
   skills/duties/SKILL.md  # the four grounded duty blocks
   skills/context/SKILL.md # store roster + "no promos" + shift-log pointer
-  mctools/world_db/       # direct-Postgres SQL tool — UNWIRED (dev-only)
   FINAL.md                # feature freeze
   FINDINGS.md             # verified data facts
   BUILDIT.md              # detailed executable build plan
@@ -224,30 +238,100 @@ localdev/
   mcctx.py                # run_sql over the MCP, for scripts
   backtest.py             # in-SQL forecast backtest (5.6% WAPE)
   runner.py               # patched: forward MCP auth headers
+  requirements.txt        # psycopg dropped (only world_db used it)
+chat/
+  server.py               # stdlib server: / landing, /chat UI, POST /api/chat -> agent
+  index.html              # dark chat page (Streamlit replacement)
 product/
-  index.html              # pitch landing page
+  index.html              # liquid-glass landing page; CTAs -> /chat
 ```
 
-Committed on branch **`feat/stock-scott-agent`**. Secrets stay in the gitignored `localdev/.env`.
+**Git:** branch **`compactioncrew/scott`** (renamed from `feat/stock-scott-agent`), pushed to two
+remotes: **origin** = `atlanhq/atlan-hackathon-onboarding`, **cc-dev** = `ayush-atlan/cc-dev`. Latest
+commit `1610a4d`. Secrets stay in gitignored `localdev/.env` (verified never committed). Note: a
+second checkout exists at `~/compactioncrew/scott-agent` with the same branch/commits.
 
 ---
 
-## 10. What's next
+## 10. Deploying to Claude Managed Agents (CMA) — DONE
 
-1. **Spend bench life #1.** Deploy the CMA in our workspace (`docs/building-agents.md`), register the
-   agent id + version, and do one **Run** against the hidden set to see where we stand. Fix from the
-   trace; hold lives #2 and #3.
-2. **Harden the thin slices.** Variance/reorder only have 3 stores × 1 week of counts — the bench
-   likely targets exactly that slice. Make sure the queries degrade gracefully (decline clearly when
-   a count is missing rather than guessing).
-3. **Tune the forecast knobs.** Sweep the trailing window (4 vs 8 weeks) and the catering uplift with
-   `backtest.py`; keep whichever lowers median WAPE. Confirm the over-portion signal by checking
-   whether `inv_usage_daily.qty_used` is recorded actuals vs theoretical.
-4. **Finish the product.** Wire the retroactive-audit dollar figure and savings counter from the
-   backtest, add the sustainability (lbs/CO2e) and EPS framing as labelled projections, and the
-   static rebalancing + Patty-handoff illustration.
-5. **Pitch.** Deck + walkthrough video; narrate override-learning (#6) as roadmap; be explicit that
-   the 10-store numbers are a pilot and the chain-wide ones are projections.
+Deployed via the `ant` CLI (v1.13.0). The **live agent is `agent_01LnuHzFhUWutjtkRkLU5HNQ`,
+currently version 2**, model `claude-opus-4-8`.
 
-**Open questions to close:** is `inv_usage_daily` actuals or theoretical? How are `inv_counts`
-spaced (is a "window" the span between two consecutive counts)? Both are one query each.
+**How (repeat/iterate):**
+1. Participant `ANTHROPIC_API_KEY` in a gitignored root `.env` (from 1Password — **never the judge
+   key**). MCP url/token in `localdev/.env`.
+2. Build the deployed system prompt = the *exact* local one (agent.yaml + both skills concatenated):
+   `.venv/bin/python -c "import sys;sys.path.insert(0,'localdev');from runner import load_agent;m,s=load_agent('stock');open('/tmp/scott_system.txt','w').write(s)"`
+3. `ant beta:agents create --name "Scott — Inventory & Supply" --model '{id: claude-opus-4-8}'
+   --system "$(cat /tmp/scott_system.txt)" --mcp-server "{type: url, name: mcctx, url: \"$MCCTX_MCP_URL\"}"
+   --tool '{type: agent_toolset_20260401}' --tool '{type: mcp_toolset, mcp_server_name: mcctx,
+   default_config: {permission_policy: {type: always_allow}}}' --format json`
+4. Iterate → new version: `ant beta:agents update --agent-id <id> --version <current> --system "$(cat /tmp/scott_system.txt)"`.
+5. Register `agent_01LnuHzFhUWutjtkRkLU5HNQ` on the McContext platform **Deploy** page → **Resolve**
+   (pulls latest version) → **Run** (spends 1 of 3 lives) → **Submit**.
+
+**CMA gotchas we hit (things the repo guide under-specifies):**
+- `--model` needs the **object** form `'{id: claude-opus-4-8}'`, not a bare string.
+- **MCP auth is NOT in the agent** — the agent only declares `{type:url,name,url}`; the Bearer token
+  is supplied at **session** time via a **vault** (URL-matched). At grading time the platform
+  provides it; for our own Console test sessions, pick the pre-provisioned `hackathon-participant`
+  environment (it supplies MCP auth) — no vault needed there.
+- **`mcp_toolset` defaults to `always_ask`** → an autonomous bench run would freeze. We set
+  `default_config.permission_policy.type = always_allow`. **If Scott ever stalls mid-run, this is why.**
+- **Skills are inlined** into the system prompt for now (`skills: []` first-class). Exact parity with
+  local. Upgrade path = first-class `--skill` for progressive disclosure (see §12).
+- **Can't find the agent in the Console?** It's scoped to the workspace the API key belongs to — pick
+  the workspace that also shows the "Frye (demo)" agent. The API confirms it exists regardless
+  (`ant beta:agents list`).
+
+---
+
+## 11. Trap-hardening (the most important quality change) — DONE, deployed as v2
+
+The organizers' platform walkthrough revealed the scoring principle: **the database has intentional
+traps, `world_meta.now` is the source of truth for "today," and agents that skip verification (to
+save tokens, or via custom tools) hallucinate and score 0.** Example trap: a simulated user claims
+"it's been 10 days" but the data says 17 — a refund/expiry window flips on the true date.
+
+We hardened Scott (`agent.yaml` + `duties` skill) on the two named failure modes:
+- **Trust the data, not the claim** — never take a user-asserted date/quantity/status at face value;
+  look it up; if the data disagrees, go with the data and say so.
+- **Grounding beats efficiency** — never skip a verification query to save tokens/tool calls.
+- **Always read `world_meta.now`** as "today" before any date-dependent step.
+
+**Verified** with a deliberate double-trap prompt ("Today is Jan 15 2026… expires in 8 days"): Scott
+queried the clock, corrected *both* facts from the data (real date 2026-06-24; real shelf life 14d →
+10 days left, not 8), and declined the markdown. Exactly the failure mode the video described,
+defeated. Deployed as v2.
+
+---
+
+## 12. Open work / next steps (for whoever picks this up)
+
+**Efficiency — findings 1–3 APPLIED (deployed as v3); finding 4 held:**
+- ✅ **`world_meta` shape bug fixed** — was `world_meta.now` (a column) but it's `key/value`, causing
+  **~3 discovery calls/session**. Now the prompt + `duties` give the exact one-call query
+  `SELECT value FROM world.world_meta WHERE key='now'`. Correctness + efficiency win.
+- ✅ **Clock read scoped** — was "ALWAYS at the start" (over-fired on scope refusals); now "before
+  any date-dependent step."
+- ✅ **Discovery scoped** — removed "discover via information_schema"; the `duties` skill lists all
+  tables, so Scott queries them directly and only probes `information_schema` if something's missing.
+- ⏸ **~4,054 tokens inlined every turn** (both skills in the system prompt) — HELD. Token lever =
+  move `duties`/`context` to first-class `--skill` (CMA progressive disclosure). Trades determinism;
+  grounding wins the bench, so leave inlined unless efficiency scoring demands it.
+
+**Product / pitch:**
+- Wire the retroactive-audit dollar figure + savings counter from `backtest.py`; add sustainability
+  (lbs/CO2e) and EPS framing as **labelled projections**; static rebalancing + Patty-handoff illustration.
+- Deck + walkthrough video. Narrate override-learning (#6) as roadmap; be explicit pilot vs projection.
+
+**Bench:**
+- Spend life #1: Run `agent_01LnuHzFhUWutjtkRkLU5HNQ` on the platform, read the trace, fix, hold lives 2–3.
+- Harden thin slices: variance/reorder only have 3 stores × 1 week of counts — decline cleanly when a
+  count is missing rather than guessing.
+- Tune forecast knobs with `backtest.py` (4 vs 8 wk window, catering uplift); keep what lowers WAPE.
+
+**Open data questions (one query each):** is `inv_usage_daily.qty_used` recorded actuals or
+theoretical (decides the over-portion signal)? How are `inv_counts` spaced (is a "window" the span
+between two consecutive counts per store/sku)?
