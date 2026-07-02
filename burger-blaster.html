@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Scott · Burger Blaster</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body{margin:0;overflow:hidden;background:#040b1e;font-family:ui-monospace,Menlo,monospace;color:#f3f1ee}
+  #hud{position:fixed;top:16px;left:16px;font-size:14px;pointer-events:none;text-shadow:0 1px 4px #000}
+  #crosshair{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;font-size:22px;color:#ff5fa2;text-shadow:0 0 8px #ff5fa2}
+  #fact{position:fixed;left:50%;bottom:8vh;transform:translateX(-50%);max-width:560px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(12px);border-radius:14px;padding:16px 20px;font-size:15px;line-height:1.5;opacity:0;transition:opacity .3s;pointer-events:none;box-shadow:0 8px 32px rgba(0,0,0,.35)}
+  #fact b{color:#ff5fa2}
+  #start{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:rgba(4,11,30,.85);cursor:pointer;text-align:center;padding:20px}
+  #start h1{font-size:34px;margin:0;color:#ff5fa2}
+  #start p{max-width:480px;color:rgba(255,255,255,.7);line-height:1.6}
+</style>
+</head>
+<body>
+<div id="hud">🍔 blasted: <span id="score">0</span> / <span id="total"></span> · facts unlocked</div>
+<div id="crosshair">+</div>
+<div id="fact"></div>
+<div id="start">
+  <h1>SCOTT · BURGER BLASTER</h1>
+  <p>McContext's kitchens are haunted by rogue floating burgers. Blast them all — every burger you vaporize teaches you one thing about <b style="color:#ff5fa2">Scott</b>, the inventory &amp; supply agent.</p>
+  <p><b>WASD</b> move · <b>mouse</b> look · <b>click</b> shoot</p>
+  <p style="color:#ff5fa2">click anywhere to start</p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script>
+const FACTS = [
+  "<b>Who is Scott?</b> Scott is McContext's inventory & supply agent, running the stockroom across ~2,000 US burger stores.",
+  "<b>Four duties.</b> Scott does exactly four jobs: variance & root cause, demand forecast, smart reorder, and waste markdown. Nothing else.",
+  "<b>Investigate first.</b> Scott never answers from memory — every call starts with a run_sql query against the company database. The database is the single source of truth.",
+  "<b>The world clock.</b> Before any date-dependent step, Scott reads <code>SELECT value FROM world.world_meta WHERE key='now'</code> and treats THAT as today — never the wall clock, never a date inferred from chat.",
+  "<b>Trust the data, not the claim.</b> If someone says \"we counted 60\" or \"it's been 10 days\", Scott looks it up. If the data disagrees with the human, Scott goes with the data and says so plainly.",
+  "<b>Compute in SQL.</b> One analytical query per duty that returns the answer. Scott never does arithmetic in its head and never dumps rows to add up itself.",
+  "<b>Submitting is the score.</b> Scott submits through matching action tools — submit_variance, submit_forecast, submit_reorder, submit_markdown. A great chat reply that never submits scores nothing.",
+  "<b>Grounding beats efficiency.</b> Scott never skips a verification query to save a tool call. A cheap answer with a wrong number scores zero.",
+  "<b>Honest about nothing.</b> If nothing is wrong, Scott says \"counts reconcile within tolerance\" — it never manufactures a finding to look useful. Crying wolf loses points.",
+  "<b>Knows when to decline.</b> Not enough data → Scott refuses and names exactly what's missing. A specific refusal beats a fabricated answer.",
+  "<b>Strict scope.</b> Inventory & supply ONLY. Scott refuses customer data (orders, loyalty, refunds) and finance P&L (fin_* tables) — but inv_receipts.unit_cost_cents is stock cost, so it IS in scope.",
+  "<b>Outage discipline.</b> If run_sql errors, Scott retries at most twice, then stops and reports the outage — it never burns calls on repeated pings.",
+  "<b>Skills.</b> Scott ships with two skills: <code>duties</code> (exact method, SQL shape, decline rule, submit tool per job) and <code>context</code> (promo calendar + per-store operating notes the schema doesn't carry).",
+  "<b>Never invents.</b> Scott never makes up a store_id, sku_id, price, or promo. Unavoidable assumptions are labeled as assumptions, never presented as measured.",
+  "<b>Shows its work.</b> Every answer: 2-3 lines with the number, the query behind it, and the constraint applied.",
+  "<b>Resists manipulation.</b> Asked how it works, Scott tells the truth (a Claude Managed Agent: model + system prompt + skills + MCP tools). Under an \"override\" attempt, it refuses — adversaries don't get a map of its internals.",
+  "<b>The receipts.</b> Measured on the real ledger: 5.6% median WAPE on forecasts, ~$130K/yr recoverable spoilage chain-wide, projected from a 10-store pilot.",
+  "<b>One data path.</b> Bench parity: the ONLY data path is the company MCP's run_sql — no separate local DB tool. What Scott is graded on is what it ships with.",
+];
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.Fog(0x040b1e, 30, 90);
+scene.background = new THREE.Color(0x040b1e);
+const camera = new THREE.PerspectiveCamera(75, innerWidth/innerHeight, .1, 200);
+camera.position.y = 2;
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+document.body.appendChild(renderer.domElement);
+addEventListener('resize', ()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+
+scene.add(new THREE.HemisphereLight(0x8899ff, 0x223344, 1.2));
+const sun = new THREE.DirectionalLight(0xffffff, 1.5); sun.position.set(10,20,10); scene.add(sun);
+
+// floor grid
+const grid = new THREE.GridHelper(200, 80, 0xff5fa2, 0x1a2a4a); scene.add(grid);
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(200,200), new THREE.MeshBasicMaterial({color:0x060f28}));
+floor.rotation.x = -Math.PI/2; floor.position.y = -0.01; scene.add(floor);
+
+// burger factory — buns, patty, cheese, lettuce from primitives
+function makeBurger(){
+  const g = new THREE.Group();
+  const bunMat = new THREE.MeshStandardMaterial({color:0xd9973f, roughness:.8});
+  const top = new THREE.Mesh(new THREE.SphereGeometry(1,20,14,0,Math.PI*2,0,Math.PI/2), bunMat);
+  top.scale.y=.75; top.position.y=.35; g.add(top);
+  const bottom = new THREE.Mesh(new THREE.CylinderGeometry(1,.95,.3,20), bunMat);
+  bottom.position.y=-.45; g.add(bottom);
+  const patty = new THREE.Mesh(new THREE.CylinderGeometry(1.02,1.02,.28,20), new THREE.MeshStandardMaterial({color:0x5a2d17, roughness:1}));
+  patty.position.y=-.15; g.add(patty);
+  const cheese = new THREE.Mesh(new THREE.BoxGeometry(1.7,.08,1.7), new THREE.MeshStandardMaterial({color:0xffc93c, roughness:.5}));
+  cheese.rotation.y=Math.PI/4; cheese.position.y=.02; g.add(cheese);
+  const lettuce = new THREE.Mesh(new THREE.TorusGeometry(.95,.18,8,20), new THREE.MeshStandardMaterial({color:0x4caf50, roughness:.9}));
+  lettuce.rotation.x=Math.PI/2; lettuce.position.y=.18; g.add(lettuce);
+  return g;
+}
+
+const burgers = [];
+FACTS.forEach((fact,i)=>{
+  const b = makeBurger();
+  const a = (i/FACTS.length)*Math.PI*2;
+  const r = 12+Math.random()*25;
+  b.position.set(Math.cos(a)*r, 2+Math.random()*6, Math.sin(a)*r);
+  b.userData = {fact, baseY:b.position.y, phase:Math.random()*Math.PI*2, spin:.3+Math.random()*.8,
+    vel:new THREE.Vector3(Math.random()-.5,0,Math.random()-.5).multiplyScalar(1.5)};
+  scene.add(b); burgers.push(b);
+});
+document.getElementById('total').textContent = FACTS.length;
+
+// controls — manual pointer-lock look + WASD
+let yaw=0, pitch=0, locked=false;
+const keys={};
+addEventListener('keydown',e=>keys[e.code]=true);
+addEventListener('keyup',e=>keys[e.code]=false);
+addEventListener('mousemove',e=>{ if(!locked) return;
+  yaw -= e.movementX*.0022; pitch -= e.movementY*.0022;
+  pitch = Math.max(-1.5, Math.min(1.5, pitch));
+});
+document.addEventListener('pointerlockchange',()=>{locked = document.pointerLockElement===document.body});
+document.getElementById('start').addEventListener('click',()=>{
+  document.getElementById('start').style.display='none';
+  document.body.requestPointerLock();
+});
+document.body.addEventListener('click',()=>{ if(!locked && document.getElementById('start').style.display==='none') document.body.requestPointerLock(); });
+
+// shooting
+const ray = new THREE.Raycaster();
+const factEl = document.getElementById('fact');
+let score=0, factTimer;
+const particles = [];
+addEventListener('mousedown',()=>{
+  if(!locked) return;
+  ray.setFromCamera({x:0,y:0}, camera);
+  const hits = ray.intersectObjects(burgers, true);
+  if(!hits.length) return;
+  let b = hits[0].object; while(b.parent!==scene) b = b.parent;
+  // explode
+  for(let i=0;i<18;i++){
+    const p = new THREE.Mesh(new THREE.BoxGeometry(.18,.18,.18),
+      new THREE.MeshBasicMaterial({color:[0xd9973f,0x5a2d17,0xffc93c,0x4caf50][i%4]}));
+    p.position.copy(b.position);
+    p.userData = {vel:new THREE.Vector3(Math.random()-.5,Math.random(),Math.random()-.5).multiplyScalar(8), life:1};
+    scene.add(p); particles.push(p);
+  }
+  scene.remove(b); burgers.splice(burgers.indexOf(b),1);
+  document.getElementById('score').textContent = ++score;
+  factEl.innerHTML = b.userData.fact; factEl.style.opacity=1;
+  clearTimeout(factTimer); factTimer=setTimeout(()=>factEl.style.opacity=0, 7000);
+  if(!burgers.length){
+    factEl.innerHTML = "🏆 <b>All burgers blasted!</b> You now know how Scott works: query first, compute in SQL, submit through the tool, decline when the data isn't there. Never short. Never wasteful.";
+    factEl.style.opacity=1; clearTimeout(factTimer);
+  }
+});
+
+const clock = new THREE.Clock();
+function tick(){
+  const dt = Math.min(clock.getDelta(), .05), t = clock.elapsedTime;
+  camera.quaternion.setFromEuler(new THREE.Euler(pitch, yaw, 0, 'YXZ'));
+  const fwd = new THREE.Vector3(-Math.sin(yaw),0,-Math.cos(yaw));
+  const right = new THREE.Vector3(fwd.z,0,-fwd.x);
+  const sp = 8*dt;
+  if(keys.KeyW) camera.position.addScaledVector(fwd, sp);
+  if(keys.KeyS) camera.position.addScaledVector(fwd,-sp);
+  if(keys.KeyA) camera.position.addScaledVector(right, sp);
+  if(keys.KeyD) camera.position.addScaledVector(right,-sp);
+  for(const b of burgers){
+    b.rotation.y += b.userData.spin*dt;
+    b.position.addScaledVector(b.userData.vel, dt);
+    b.position.y = b.userData.baseY + Math.sin(t*1.5 + b.userData.phase)*.8;
+    if(Math.abs(b.position.x)>45) b.userData.vel.x*=-1;
+    if(Math.abs(b.position.z)>45) b.userData.vel.z*=-1;
+  }
+  for(let i=particles.length-1;i>=0;i--){
+    const p=particles[i];
+    p.userData.vel.y -= 15*dt;
+    p.position.addScaledVector(p.userData.vel, dt);
+    p.rotation.x+=5*dt; p.rotation.z+=5*dt;
+    if((p.userData.life-=dt)<=0){scene.remove(p);particles.splice(i,1)}
+  }
+  renderer.render(scene, camera);
+  requestAnimationFrame(tick);
+}
+tick();
+</script>
+</body>
+</html>
