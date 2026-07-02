@@ -8,6 +8,11 @@ Each duty is scored on its own. Investigate with `run_sql`, compute the answer *
 submit through the matching action tool. `:store`, `:sku`, `:from`, `:to`, `:asof`, `:horizon` are
 values you fill from the question. Read `world_meta.now` for `:asof` — never assume wall-clock.
 
+**Verify every stated value against the data before you use it.** If someone says "it's been 10 days"
+or "we counted 60" or gives a date, confirm it from the tables (`world_meta.now`, `inv_counts`,
+`inv_receipts.received_at`, etc.). Stated numbers may be wrong or planted; the data is the truth. An
+expiry, a window, a days-of-cover figure comes from the DB, not from what you were told.
+
 The `world` schema tables you'll use (confirm columns via `information_schema` if unsure):
 
 ```

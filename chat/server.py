@@ -42,9 +42,9 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(b)
 
     def do_GET(self):
-        if self.path in ("/", "/index.html"):   # the product landing page
+        if self.path == "/":   # the product landing page
             self._send(200, LANDING.read_text(), "text/html; charset=utf-8")
-        elif self.path in ("/chat", "/chat.html"):   # the chat UI
+        elif self.path == "/chat":   # the chat UI
             self._send(200, CHAT_HTML, "text/html; charset=utf-8")
         elif self.path == "/agent":
             self._send(200, json.dumps({"agent": AGENT}))
